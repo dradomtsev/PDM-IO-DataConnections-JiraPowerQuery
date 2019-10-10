@@ -12,14 +12,15 @@
     <AsAction>False</AsAction>
     <FastCombine>False</FastCombine>
     <ClearLog>False</ClearLog>
-    <ShowEngineTraces>False</ShowEngineTraces>
-    <ShowUserTraces>False</ShowUserTraces>
+    <ShowEngineTraces>True</ShowEngineTraces>
+    <ShowUserTraces>True</ShowUserTraces>
     <LegacyRedirects>False</LegacyRedirects>
     <SuppressRowErrors>False</SuppressRowErrors>
     <SuppressCellErrors>False</SuppressCellErrors>
-    <MaxRows>1000</MaxRows>
+    <MaxRows>200</MaxRows>
     <ExtensionProject>Yes</ExtensionProject>
     <Name>Archimatika.IO.Jira</Name>
+    <ThrowOnFoldingFailure>False</ThrowOnFoldingFailure>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>false</DebugSymbols>
@@ -114,5 +115,8 @@
     <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
     <!-- Remove bin folder -->
     <RemoveDir Directories="$(OutputPath)" />
+  </Target>
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(OutputPath)\$(ProjectName).mez" DestinationFolder="%USERPROFILE%\Documents\Power BI Desktop\Custom Connectors" ContinueOnError="true" />
   </Target>
 </Project>
