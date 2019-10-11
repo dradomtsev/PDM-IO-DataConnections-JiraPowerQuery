@@ -1,79 +1,41 @@
 ﻿// This file contains your Data Connector logic
 section Archimatika.IO.Jira;
 
-// iRateLimit = 50;
-// sJiraServiceAddress = "https://archimatika.atlassian.net/rest/api";
-// sAPIVersion = "3";
-// sAdrsDlm = "/";
-// iRowNumber = 1000;
-// sRESTactionIssues = "search?fields";
-// sRESTactionUsers = "users/search";
-// sRESTfields = "issuetype,customfield_10070,timespent,project,resolution,workratio,lastViewed,lastViewed,watches,created,timeestimate,issuelinks,assignee,updated,status,timeoriginalestimate,description,aggregatetimeestimate,summary,subtasks,reporter,duedate,progress,  worklog";
-// sSrchDlm = "=";
-// iStartCounter = 0;
-// iMAxResults = 1;
+iRateLimit = 50;
+sJiraServiceAddress = "https://archimatika.atlassian.net/rest/api";
+sAPIVersion = "3";
+sAdrsDlm = "/";
+iRowNumber = 1000;
+sRESTactionIssues = "search?fields";
+sRESTactionUsers = "users/search";
+sRESTfields = "issuetype,customfield_10070,timespent,project,resolution,workratio,lastViewed,lastViewed,watches,created,timeestimate,issuelinks,assignee,updated,status,timeoriginalestimate,description,aggregatetimeestimate,summary,subtasks,reporter,duedate,progress,  worklog";
+sSrchDlm = "=";
+iStartCounter = 0;
+iMAxResults = 1;
 
-// JSONContent         = File.Contents("C:\Users\d.radomtsev\source\repos\Archimatika.IO.Jira\config.json");
-// JSONData            = Json.Document(JSONContent);
-// Table_Imported      = Record.ToTable(JSONData);
-// Table_Transposed    = Table.Transpose(Table_Imported);
-// Headers_Promoted    = Table.PromoteHeaders(Table_Transposed, [PromoteAllScalars=true]);
-// iRateLimit          = Headers_Promoted{0}[iRateLimit];
-// sJiraServiceAddress = Headers_Promoted{0}[sJiraServiceAddress];
-// sAPIVersion         = Headers_Promoted{0}[sAPIVersion];
-// sAdrsDlm            = Headers_Promoted{0}[sAdrsDlm];
-// iRowNumber          = Headers_Promoted{0}[iRowNumber];
-// sRESTactionIssues   = Headers_Promoted{0}[sRESTactionIssues];
-// sRESTactionUsers    = Headers_Promoted{0}[sRESTactionUsers];
-// sRESTfields         = Headers_Promoted{0}[sRESTfields];
-// sSrchDlm            = Headers_Promoted{0}[sSrchDlm];
-// iStartCounter       = Headers_Promoted{0}[iStartCounter];
-// iMAxResults         = Headers_Promoted{0}[iMAxResults];
-
-Init = () => 
+shared Init = () =>
     let
-            JSONContent         = File.Contents("C:\Users\d.radomtsev\source\repos\Archimatika.IO.Jira\config.json"),
-            JSONData            = Json.Document(JSONContent),
-            Table_Imported      = Record.ToTable(JSONData),
-            Table_Transposed    = Table.Transpose(Table_Imported),
-            Headers_Promoted    = Table.PromoteHeaders(Table_Transposed, [PromoteAllScalars=true]),
+        JSONContent         = File.Contents("C:\Users\d.radomtsev\source\repos\Archimatika.IO.Jira\config.json"),
+        JSONData            = Json.Document(JSONContent),
+        Table_Imported      = Record.ToTable(JSONData),
+        Table_Transposed    = Table.Transpose(Table_Imported),
+        Headers_Promoted    = Table.PromoteHeaders(Table_Transposed, [PromoteAllScalars=true]),
 
-            iRateLimit          = Headers_Promoted{0}[iRateLimit],
-            sJiraServiceAddress = Headers_Promoted{0}[sJiraServiceAddress],
-            sAPIVersion         = Headers_Promoted{0}[sAPIVersion],
-            sAdrsDlm            = Headers_Promoted{0}[sAdrsDlm],
-            iRowNumber          = Headers_Promoted{0}[iRowNumber],
-            sRESTactionIssues   = Headers_Promoted{0}[sRESTactionIssues],
-            sRESTactionUsers    = Headers_Promoted{0}[sRESTactionUsers],
-            sRESTfields         = Headers_Promoted{0}[sRESTfields],
-            sSrchDlm            = Headers_Promoted{0}[sSrchDlm],
-            iStartCounter       = Headers_Promoted{0}[iStartCounter],
-            iMAxResults         = Headers_Promoted{0}[iMAxResults]
+        iRateLimit          = Headers_Promoted{0}[iRateLimit],
+        sJiraServiceAddress = Headers_Promoted{0}[sJiraServiceAddress],
+        sAPIVersion         = Headers_Promoted{0}[sAPIVersion],
+        sAdrsDlm            = Headers_Promoted{0}[sAdrsDlm],
+        iRowNumber          = Headers_Promoted{0}[iRowNumber],
+        sRESTactionIssues   = Headers_Promoted{0}[sRESTactionIssues],
+        sRESTactionUsers    = Headers_Promoted{0}[sRESTactionUsers],
+        sRESTfields         = Headers_Promoted{0}[sRESTfields],
+        sSrchDlm            = Headers_Promoted{0}[sSrchDlm],
+        iStartCounter       = Headers_Promoted{0}[iStartCounter],
+        iMAxResults         = Headers_Promoted{0}[iMAxResults]
     in
-       {iRateLimit, sJiraServiceAddress, sAPIVersion, sAdrsDlm, iRowNumber, sRESTactionIssues, sRESTactionUsers, sRESTfields, sSrchDlm, iStartCounter, iMAxResults};
+        {iRateLimit, sJiraServiceAddress, sAPIVersion, sAdrsDlm, iRowNumber, sRESTactionIssues, sRESTactionUsers, sRESTfields, sSrchDlm, iStartCounter, iMAxResults};
 
-// let
-//     JSONContent         = File.Contents("C:\Users\d.radomtsev\source\repos\Archimatika.IO.Jira\config.json"),
-//     JSONData            = Json.Document(JSONContent),
-//     Table_Imported      = Record.ToTable(JSONData),
-//     Table_Transposed    = Table.Transpose(Table_Imported),
-//     Headers_Promoted    = Table.PromoteHeaders(Table_Transposed, [PromoteAllScalars=true]),
-// 
-//     iRateLimit          = Headers_Promoted{0}[iRateLimit],
-//     sJiraServiceAddress = Headers_Promoted{0}[sJiraServiceAddress],
-//     sAPIVersion         = Headers_Promoted{0}[sAPIVersion],
-//     sAdrsDlm            = Headers_Promoted{0}[sAdrsDlm],
-//     iRowNumber          = Headers_Promoted{0}[iRowNumber],
-//     sRESTactionIssues   = Headers_Promoted{0}[sRESTactionIssues],
-//     sRESTactionUsers    = Headers_Promoted{0}[sRESTactionUsers],
-//     sRESTfields         = Headers_Promoted{0}[sRESTfields],
-//     sSrchDlm            = Headers_Promoted{0}[sSrchDlm],
-//     iStartCounter       = Headers_Promoted{0}[iStartCounter],
-//     iMAxResults         = Headers_Promoted{0}[iMAxResults]
-// in
-//     {iRateLimit, sJiraServiceAddress, sAPIVersion, sAdrsDlm, iRowNumber, sRESTactionIssues, sRESTactionUsers, sRESTfields, sSrchDlm, iStartCounter, iMAxResults};
-
-[DataSource.Kind="Archimatika.IO.Jira", Publish="Archimatika.IO.Jira.Publish"]
+//[DataSource.Kind="Archimatika.IO.Jira", Publish="Archimatika.IO.Jira.Publish"]
 shared CreateNavTable = () as table => 
     let
 		objects = #table(
@@ -85,9 +47,21 @@ shared CreateNavTable = () as table =>
     in
         NavTable;
 
-//[DataSource.Kind="Archimatika.IO.Jira", Publish="Archimatika.IO.Jira.Publish"]
-shared Archimatika.IO.Jira.IssuesWorklog = (iRateLimit, sJiraServiceAddress, sAPIVersion, sAdrsDlm, iRowNumber, sRESTactionIssues, sRESTactionUsers, sRESTfields, sSrchDlm, iStartCounter, iMAxResults ) =>
-	let
+[DataSource.Kind="Archimatika.IO.Jira", Publish="Archimatika.IO.Jira.Publish"]
+shared Archimatika.IO.Jira.IssuesWorklog = () => //(iRateLimit, sJiraServiceAddress, sAPIVersion, sAdrsDlm, iRowNumber, sRESTactionIssues, sRESTactionUsers, sRESTfields, sSrchDlm, iStartCounter, iMAxResults ) =>
+    let
+//         iRateLimit = 50,
+//         sJiraServiceAddress = "https://archimatika.atlassian.net/rest/api",
+//         sAPIVersion = "3",
+//         sAdrsDlm = "/",
+//         iRowNumber = 1000,
+//         sRESTactionIssues = "search?fields",
+//         sRESTactionUsers = "users/search",
+//         sRESTfields = "issuetype,customfield_10070,timespent,project,resolution,workratio,lastViewed,lastViewed,watches,created,timeestimate,issuelinks,assignee,updated,status,timeoriginalestimate,description,aggregatetimeestimate,summary,subtasks,reporter,duedate,progress,  worklog",
+//         sSrchDlm = "=",
+//         iStartCounter = 0,
+//         iMAxResults = 1,
+
 		GetJiraData = 
 		let
 			sURL = Text.Combine({sJiraServiceAddress, sAPIVersion},sAdrsDlm),
@@ -139,8 +113,21 @@ shared Archimatika.IO.Jira.IssuesWorklog = (iRateLimit, sJiraServiceAddress, sAP
 	in
 		ExpandJiraData;
 
-shared Archimatika.IO.Jira.Users = (iRateLimit, sJiraServiceAddress, sAPIVersion, sAdrsDlm, iRowNumber, sRESTactionIssues, sRESTactionUsers, sRESTfields, sSrchDlm, iStartCounter, iMAxResults) =>
+[DataSource.Kind="Archimatika.IO.Jira", Publish="Archimatika.IO.Jira.Publish"]
+shared Archimatika.IO.Jira.Users = () =>
 	let
+//         iRateLimit = 50,
+//         sJiraServiceAddress = "https://archimatika.atlassian.net/rest/api",
+//         sAPIVersion = "3",
+//         sAdrsDlm = "/",
+//         iRowNumber = 1000,
+//         sRESTactionIssues = "search?fields",
+//         sRESTactionUsers = "users/search",
+//         sRESTfields = "issuetype,customfield_10070,timespent,project,resolution,workratio,lastViewed,lastViewed,watches,created,timeestimate,issuelinks,assignee,updated,status,timeoriginalestimate,description,aggregatetimeestimate,summary,subtasks,reporter,duedate,progress,  worklog",
+//         sSrchDlm = "=",
+//         iStartCounter = 0,
+//         iMAxResults = 1,
+
 		GetJiraData = let
 		    Limits = List.Generate(()=>0, each _ > -1 and _ < iRowNumber, each _ + iRateLimit),
 		    List_ConvtoTable = Table.FromList(Limits, Splitter.SplitByNothing(), null, null, ExtraValues.Error),

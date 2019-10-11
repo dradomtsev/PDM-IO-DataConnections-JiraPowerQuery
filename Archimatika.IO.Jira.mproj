@@ -70,6 +70,12 @@
     <Content Include="Archimatika.IO.Jira.query.pq">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Issues+Worklog.pq">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Users.pq">
+      <SubType>Content</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <UsingTask TaskName="BuildExtension" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v12.0.dll">
