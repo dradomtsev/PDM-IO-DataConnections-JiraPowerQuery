@@ -1,0 +1,13 @@
+{
+    "iRateLimit" : 50,
+    "sJiraServiceAddress" : "https://archimatika.atlassian.net/rest/api",
+    "sAPIVersion" : "3",
+    "sAdrsDlm" : "/",
+    "iRowNumber" : 1000,
+    "sRESTactionIssues" : "search?fields",
+    "sRESTactionUsers" : "users/search",
+    "sRESTfields" : "issuetype,customfield_10070,timespent,project,resolution,workratio,lastViewed,lastViewed,watches,created,timeestimate,issuelinks,assignee,updated,status,timeoriginalestimate,description,aggregatetimeestimate,summary,subtasks,reporter,duedate,progress,  worklog",
+    "sSrchDlm" : ":",
+    "iStartCounter" : 0,
+    "iMAxResults" : 1
+}
