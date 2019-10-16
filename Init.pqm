@@ -1,0 +1,60 @@
+﻿(path as text) as table =>
+let
+    JSONContent         = File.Contents(path),
+    JSONData            = Json.Document(JSONContent),
+    Table_Imported      = Record.ToTable(JSONData),
+    Table_Transposed    = Table.Transpose(Table_Imported),
+    Headers_Promoted    = Table.PromoteHeaders(Table_Transposed, [PromoteAllScalars=true])
+// 
+//     iRateLimit          = Headers_Promoted{0}[iRateLimit],
+//     sJiraServiceAddress = Headers_Promoted{0}[sJiraServiceAddress],
+//     sAPIVersion         = Headers_Promoted{0}[sAPIVersion],
+//     sAdrsDlm            = Headers_Promoted{0}[sAdrsDlm],
+//     iRowNumber          = Headers_Promoted{0}[iRowNumber],
+//     sRESTactionIssues   = Headers_Promoted{0}[sRESTactionIssues],
+//     sRESTactionUsers    = Headers_Promoted{0}[sRESTactionUsers],
+//     sRESTfields         = Headers_Promoted{0}[sRESTfields],
+//     sSrchDlm            = Headers_Promoted{0}[sSrchDlm],
+//     iStartCounter       = Headers_Promoted{0}[iStartCounter],
+//     iMAxResults         = Headers_Promoted{0}[iMAxResults]
+
+// 	iRateLimit = 50,
+// 	sJiraServiceAddress = "https://archimatika.atlassian.net/rest/api",
+// 	sAPIVersion = 3,
+// 	sAdrsDlm = "/",
+// 	iRowNumber = 1000,
+// 	sRESTactionIssues = "search?fields",
+// 	sRESTactionUsers = "users/search",
+// 	sRESTfields = "issuetype,customfield_10070,timespent,project,resolution,workratio,lastViewed,lastViewed,watches,created,timeestimate,issuelinks,assignee,updated,status,timeoriginalestimate,description,aggregatetimeestimate,summary,subtasks,reporter,duedate,progress,  worklog",
+// 	sSrchDlm = "=",
+// 	iStartCounter = 0,
+// 	iMAxResults = 1
+
+in
+    Headers_Promoted
+//     [
+//         iRateLimit = iRateLimit,
+//         sJiraServiceAddress = sJiraServiceAddress, 
+//         sAPIVersion = sAPIVersion, 
+//         sAdrsDlm = sAdrsDlm, 
+//         iRowNumber = iRowNumber, 
+//         sRESTactionIssues = sRESTactionIssues, 
+//         sRESTactionUsers = sRESTactionUsers, 
+//         sRESTfields = sRESTfields, 
+//         sSrchDlm = sSrchDlm, 
+//         iStartCounter = iStartCounter, 
+//         iMAxResults = iMAxResults
+//     ]
+// 	{
+//         iRateLimit,
+//         sJiraServiceAddress, 
+//         sAPIVersion, 
+//         sAdrsDlm, 
+//         iRowNumber, 
+//         sRESTactionIssues, 
+//         sRESTactionUsers, 
+//         sRESTfields, 
+//         sSrchDlm, 
+//         iStartCounter, 
+//         iMAxResults
+//     }

@@ -1,7 +1,7 @@
 {
     "iRateLimit" : 50,
     "sJiraServiceAddress" : "https://archimatika.atlassian.net/rest/api",
-    "sAPIVersion" : "3",
+    "sAPIVersion" : 3,
     "sAdrsDlm" : "/",
     "iRowNumber" : 1000,
     "sRESTactionIssues" : "search?fields",

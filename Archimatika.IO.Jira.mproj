@@ -67,15 +67,33 @@
     <Compile Include="resources.resx">
       <SubType>Code</SubType>
     </Compile>
+    <Content Include=".gitignore">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Archimatika.IO.Jira.query.pq">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Issues+Worklog.pq">
+    <Compile Include="config.json">
+      <SubType>Content</SubType>
+    </Compile>
+    <Content Include="creds_\creds.json">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Users.pq">
+    <Compile Include="Issues.pqm">
+      <SubType>Content</SubType>
+    </Compile>
+    <Compile Include="Users.pqm">
+      <SubType>Content</SubType>
+    </Compile>
+    <Compile Include="Table_ToNavigationTable.pqm">
+      <SubType>Content</SubType>
+    </Compile>
+    <Content Include="creds_\creds_.crd">
       <SubType>Content</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="creds_" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <UsingTask TaskName="BuildExtension" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v12.0.dll">
