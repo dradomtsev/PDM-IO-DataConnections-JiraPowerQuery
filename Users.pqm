@@ -17,7 +17,7 @@ let
 					RelativePath = sURLRelPath,
                     Headers =
 				    [
-					    #"Authorization" = "Basic <username:password encoded in base64>",
+					    #"Authorization" = "Basic dGVjaEBhcmNoaW1hdGlrYS5jb206ZmRORzBFTEs1Y2hhYmthSkhlY05BRkM2",
 					    #"Content-Type"="application/json"
 				    ],
 					Query =
@@ -39,9 +39,9 @@ let
         Errors_Fixed = Table.RemoveRowsWithErrors(GetJiraData),
         Columns_Removed = Table.RemoveColumns(Errors_Fixed,{"startAt"}),
 		Errors_fix = Table.RemoveRowsWithErrors(Columns_Removed, {"PaginationFunc"}),
-		PaginationFunc_Extended = Table.ExpandTableColumn(Errors_fix, "PaginationFunc", {"Column1.self", "Column1.accountId", "Column1.accountType", "Column1.displayName"}, {"PaginationFunc.Column1.self", "PaginationFunc.Column1.accountId", "PaginationFunc.Column1.accountType", "PaginationFunc.Column1.displayName"}),
+		PaginationFunc_Extended = Table.ExpandTableColumn(Errors_fix, "PaginationFunc", {"Column1.self", "Column1.accountId", "Column1.accountType", "Column1.displayName"}, {"self", "accountId", "accountType", "displayName"}),
         Columns_Added = Table.AddIndexColumn(PaginationFunc_Extended, "index", 0, 1),
-        Coluumns_Reordered = Table.ReorderColumns(Columns_Added, {"index","PaginationFunc.Column1.self", "PaginationFunc.Column1.accountId", "PaginationFunc.Column1.accountType", "PaginationFunc.Column1.displayName"})
+        Coluumns_Reordered = Table.ReorderColumns(Columns_Added, {"index","self", "accountId", "accountType", "displayName"})
     in
         Coluumns_Reordered
 in

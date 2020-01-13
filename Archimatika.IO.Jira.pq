@@ -25,7 +25,7 @@ shared CreateNavTable = () as table =>
         iRowNumber = 1000,
         sRESTactionIssues = "search?fields",
         sRESTactionUsers = "users/search",
-        sRESTfields = "issuetype,customfield_10070,timespent,project,resolution,workratio,lastViewed,lastViewed,watches,created,timeestimate,issuelinks,assignee,updated,status,timeoriginalestimate,description,aggregatetimeestimate,summary,subtasks,reporter,duedate,progress,  worklog",
+        sRESTfields = "issuetype,customfield_10070,timespent,project,resolution,workratio,lastViewed,lastViewed,watches,created,timeestimate,issuelinks,assignee,updated,status,timeoriginalestimate,description,aggregatetimeestimate,summary,subtasks,reporter,duedate,progress,worklog,customfield_10003,customfield_10037,customfield_10095",
         sSrchDlm = "=",
         iStartCounter = 0,
         iMAxResults = 1,
