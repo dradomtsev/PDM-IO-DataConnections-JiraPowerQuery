@@ -79,6 +79,9 @@
     <Content Include="creds_\creds.json">
       <SubType>Content</SubType>
     </Content>
+    <Compile Include="Epics.pqm">
+      <SubType>Content</SubType>
+    </Compile>
     <Compile Include="Issues.pqm">
       <SubType>Content</SubType>
     </Compile>
