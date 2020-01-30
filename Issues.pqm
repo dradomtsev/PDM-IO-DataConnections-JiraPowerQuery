@@ -64,6 +64,6 @@ let
 		fields_expanded2 = Table.ExpandRecordColumn(fields_expanded, "issuetype", {"name"}, {"IssuetypeName"}),
 		Select_rows = Table.SelectRows(fields_expanded2, each not ([IssuetypeName] = "Epic")),
 		Rename_Column = Table.RenameColumns(Select_rows,{{"customfield_10014", "EpicID"}})
-	in fields_expanded	
+	in Rename_Column	
 in
     ExpandJiraData

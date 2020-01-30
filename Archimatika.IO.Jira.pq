@@ -35,7 +35,7 @@ shared CreateNavTable = () as table =>
             {"Name",            "Key",              "Data",                                 "ItemKind", "ItemName", "IsLeaf"},{
             {"Issues+Worklog",	"Issues+Worklog",   Issues(iRateLimit, sJiraServiceAddress, sAPIVersion, sAdrsDlm, sRESTactionIssues, sRESTfields, sSrchDlm, iStartCounter, iMAxResults),   "Table",    "Table",	true},            
             {"Users",			"Users",			Users(iRateLimit, sJiraServiceAddress, sAPIVersion, sAdrsDlm, iRowNumber, sRESTactionUsers, sRESTfields, sSrchDlm, iStartCounter, iMAxResults),	        "Table",    "Table",	true},
-            {"Epics",	        "Epics",   Issues(iRateLimit, sJiraServiceAddress, sAPIVersion, sAdrsDlm, sRESTactionIssues, sRESTfields, sSrchDlm, iStartCounter, iMAxResults),   "Table",    "Table",	true}
+            {"Epics",	        "Epics",            Epics(iRateLimit, sJiraServiceAddress, sAPIVersion, sAdrsDlm, sRESTactionIssues, sRESTfields, sSrchDlm, iStartCounter, iMAxResults),   "Table",    "Table",	true}
             }),
         NavTable = Table.ToNavigationTable(objects, {"Key"}, "Name", "Data", "ItemKind", "ItemName", "IsLeaf")
     in
