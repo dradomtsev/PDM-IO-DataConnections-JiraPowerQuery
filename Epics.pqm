@@ -1,0 +1,69 @@
+﻿(iRateLimit as number, sJiraServiceAddress as text, sAPIVersion as number, sAdrsDlm as text, sRESTactionIssues as text, sRESTfields as text, sSrchDlm as text, iStartCounter as number, iMAxResults as number) as table =>
+let 
+	sURL = Text.Combine({sJiraServiceAddress, Number.ToText(sAPIVersion)},sAdrsDlm),
+	sURLRelPath = Text.Combine({sRESTactionIssues, sRESTfields},sSrchDlm),
+
+	GetIssueCounter = 
+    let
+		dtJiraIssueCounter = Json.Document(Web.Contents(sURL,
+			[
+				RelativePath = sURLRelPath,
+				Headers =
+				[
+					#"Authorization" = "Basic dGVjaEBhcmNoaW1hdGlrYS5jb206ZmRORzBFTEs1Y2hhYmthSkhlY05BRkM2",
+					#"Content-Type"="application/json"
+				],
+				Query =
+				[
+					startAt     = Number.ToText(iStartCounter),
+					maxResults  = Number.ToText(iMAxResults)
+				],
+				Timeout = #duration(0, 0, 1, 0)
+			])),
+		iIssuesCount = dtJiraIssueCounter[total],
+		lIssueLimits = List.Generate(() => 0, each _ > -1 and _ < iIssuesCount, each _ + iRateLimit),
+		List_ConvtoTable = Table.FromList(lIssueLimits, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+		Table_RenamedColumns = Table.RenameColumns(List_ConvtoTable,{{"Column1", "startAt"}})
+	in 
+        Table_RenamedColumns,
+
+	dGetIssues = 
+    let
+		PaginationFunc = Table.AddColumn(GetIssueCounter, "PaginationFunc", each CustomLoopFunc(Text.From([startAt]))),
+		CustomLoopFunc = (startAt as text) => 
+		let
+			dtJiraDataSource = Json.Document(Web.Contents(sURL,
+			[
+				RelativePath = sURLRelPath,
+				Headers =
+				[
+					#"Authorization" = "Basic dGVjaEBhcmNoaW1hdGlrYS5jb206ZmRORzBFTEs1Y2hhYmthSkhlY05BRkM2",
+					#"Content-Type"="application/json"
+				],
+				Query =
+				[
+					startAt     = startAt,
+					maxResults  = Text.From(iRateLimit)
+				],
+				Timeout = #duration(0, 0, 15, 0)
+			])),
+			dtIssuesDB = dtJiraDataSource[issues],
+			List_ConvtoTable_1 = Table.FromList(dtIssuesDB, Splitter.SplitByNothing(), null, null, ExtraValues.Error)
+		in 
+			List_ConvtoTable_1  
+	in
+		PaginationFunc,
+	
+	ExpandJiraData = 
+    let
+	    Errors_Fixed = Table.RemoveRowsWithErrors(dGetIssues),
+		Filtered_Rows = Table.SelectRows(Errors_Fixed, each ([Issue.issuetype.name] = "Epic")),
+	    Columns_Removed = Table.RemoveColumns(Errors_Fixed,{"startAt"}),
+        PaginationFunc_Expanded = Table.ExpandTableColumn(Columns_Removed, "PaginationFunc", {"Column1"}, {"ARMJIRA"}),
+	    ARMJIRA_Expanded = Table.ExpandRecordColumn(PaginationFunc_Expanded, "ARMJIRA", {"expand", "id", "self", "key", "fields"}, {"expand", "id", "self", "key", "fields"}),
+        fields_expanded = Table.ExpandRecordColumn(ARMJIRA_Expanded, "fields", {"summary", "watches", "lastViewed", "issuetype", "customfield_10070", "subtasks", "timespent", "created", "timeoriginalestimate", "description", "project", "reporter", "resolution", "aggregatetimeestimate", "timeestimate", "duedate", "progress", "workratio", "issuelinks", "worklog", "customfield_10003", "customfield_10037", "customfield_10095", "assignee", "updated", "status"}, {"summary", "watches", "lastViewed", "issuetype", "MSPortfolioProject", "subtasks", "timespent", "created", "timeoriginalestimate", "description", "project", "reporter", "resolution", "aggregatetimeestimate", "timeestimate", "duedate", "progress", "workratio", "issuelinks", "worklog", "customfield_10003", "customfield_10037", "customfield_10095", "assignee", "updated", "status"}),
+		fields_expanded2 = Table.ExpandRecordColumn(fields_expanded, "issuetype", {"name"}, {"IssuetypeName"}),
+		Select_rows = Table.SelectRows(fields_expanded2, each ([IssuetypeName] = "Epic"))
+	in Select_rows	
+in
+    ExpandJiraData

@@ -1,0 +1,48 @@
+﻿(iRateLimit as number, sJiraServiceAddress as text, sAPIVersion as number, sAdrsDlm as text, iRowNumber as number, sRESTactionUsers as text, sRESTfields as text, sSrchDlm as text, iStartCounter as number, iMAxResults as number) as table =>
+let
+	GetJiraData = 
+    let
+		Limits = List.Generate(()=>0, each _ > -1 and _ < iRowNumber, each _ + iRateLimit),
+		List_ConvtoTable = Table.FromList(Limits, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+		Table_RenamedColumns = Table.RenameColumns(List_ConvtoTable,{{"Column1", "startAt"}}),
+
+        sURL = Text.Combine({sJiraServiceAddress, Number.ToText(sAPIVersion)},sAdrsDlm),
+		sURLRelPath = sRESTactionUsers,
+
+		PaginationFunc = Table.AddColumn(Table_RenamedColumns, "PaginationFunc", each CustomLoopFunc(Text.From([startAt]))),
+		CustomLoopFunc = (startAt as text) => 
+		let  
+			dtJiraDataSource = Json.Document(Web.Contents(sURL,
+				[
+					RelativePath = sURLRelPath,
+                    Headers =
+				    [
+					    #"Authorization" = "Basic dGVjaEBhcmNoaW1hdGlrYS5jb206ZmRORzBFTEs1Y2hhYmthSkhlY05BRkM2",
+					    #"Content-Type"="application/json"
+				    ],
+					Query =
+					[
+						startAt     = startAt,
+						maxResults  = Text.From(iRateLimit)
+					],
+					Timeout = #duration(0, 0, 5, 0)
+				])),
+			List_ConvtoTable_1 = Table.FromList(dtJiraDataSource, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+			Column1_Expanded = Table.ExpandRecordColumn(List_ConvtoTable_1, "Column1", {"self", "accountId", "accountType", "displayName"}, {"Column1.self", "Column1.accountId", "Column1.accountType", "Column1.displayName"})
+		in
+			Column1_Expanded
+	in
+		PaginationFunc,
+
+    ExpandJiraData = 
+    let
+        Errors_Fixed = Table.RemoveRowsWithErrors(GetJiraData),
+        Columns_Removed = Table.RemoveColumns(Errors_Fixed,{"startAt"}),
+		Errors_fix = Table.RemoveRowsWithErrors(Columns_Removed, {"PaginationFunc"}),
+		PaginationFunc_Extended = Table.ExpandTableColumn(Errors_fix, "PaginationFunc", {"Column1.self", "Column1.accountId", "Column1.accountType", "Column1.displayName"}, {"self", "accountId", "accountType", "displayName"}),
+        Columns_Added = Table.AddIndexColumn(PaginationFunc_Extended, "index", 0, 1),
+        Coluumns_Reordered = Table.ReorderColumns(Columns_Added, {"index","self", "accountId", "accountType", "displayName"})
+    in
+        Coluumns_Reordered
+in
+	ExpandJiraData
